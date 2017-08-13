@@ -54,19 +54,20 @@ window.renderStatistics = function (ctx, names, times) {
   var barIndent = 50;
   var step = histogramHeight / maxTime;
   for (i = 0; i < names.length; i++) {
-    // Set bar color.
+    // Set the bar color.
     if (names[i] === 'Вы') {
       ctx.fillStyle = 'red';
     } else {
       ctx.fillStyle = 'rgb(0, 0, ' + Math.floor(Math.random() * 255) + ')';
     }
 
+    // Draw the bar.
     var barHeight = times[i] * step;
     var barX = histogramX + (barWidth + barIndent) * i;
     var barY = histogramY + histogramHeight - barHeight;
-
     ctx.fillRect(barX, barY, barWidth, barHeight);
 
+    // Draw the bar labels.
     ctx.fillStyle = 'black';
     ctx.fillText(Math.floor(times[i]), barX, barY - 5);
     ctx.fillText(names[i], barX, histogramY + histogramHeight + 20);
