@@ -32,11 +32,12 @@ window.renderStatistics = function (ctx, names, times) {
 
   var leftIndent = 30;
   var topIndent = 35;
+  var lineHeight = 20;
 
   ctx.fillStyle = 'black';
   ctx.font = '16px PT Mono';
   ctx.fillText('Ура вы победили!', cloudX + leftIndent, cloudY + topIndent);
-  ctx.fillText('Список результатов:', cloudX + leftIndent, cloudY + topIndent + 20);
+  ctx.fillText('Список результатов:', cloudX + leftIndent, cloudY + topIndent + lineHeight);
 
   // Find a maximal game time.
   var maxTime = times[0];
@@ -47,8 +48,9 @@ window.renderStatistics = function (ctx, names, times) {
   }
 
   // Draw the times histogram.
-  var histogramX = cloudX + leftIndent + 20;
-  var histogramY = cloudY + topIndent + 45;
+  var histogramLeftIndent = 45;
+  var histogramX = cloudX + leftIndent + lineHeight;
+  var histogramY = cloudY + topIndent + histogramLeftIndent;
   var histogramHeight = 150;
   var barWidth = 40;
   var barIndent = 50;
@@ -70,6 +72,6 @@ window.renderStatistics = function (ctx, names, times) {
     // Draw the bar labels.
     ctx.fillStyle = 'black';
     ctx.fillText(Math.floor(times[i]), barX, barY - 5);
-    ctx.fillText(names[i], barX, histogramY + histogramHeight + 20);
+    ctx.fillText(names[i], barX, histogramY + histogramHeight + lineHeight);
   }
 };
