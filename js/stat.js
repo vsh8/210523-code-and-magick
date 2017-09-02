@@ -32,8 +32,9 @@ var drawCloud = function (ctx, cloudX, cloudY, cloudWidth, cloudHeight) {
 var findMax = function (numbers) {
   var maxValue = numbers[0];
   for (var i = 1; i < numbers.length; i++) {
-    if (maxValue < numbers[i])
+    if (maxValue < numbers[i]) {
       maxValue = numbers[i];
+    }
   }
 
   return maxValue;
@@ -42,8 +43,8 @@ var findMax = function (numbers) {
 
 // Draw a single histogram bar.
 var drawHistogramBar = function (
-  ctx, histogramX, histogramY, maxValue,
-  i, value, label, barColor, textColor, textFont, lineHeight) {
+    ctx, histogramX, histogramY, maxValue,
+    i, value, label, barColor, textColor, textFont, lineHeight) {
 
   var histogramHeight = 150;
   var barWidth = 40;
@@ -67,7 +68,7 @@ var drawHistogramBar = function (
 
 
 // Render game result statistics.
-var renderStatistics = function (ctx, names, times) {
+window.renderStatistics = function (ctx, names, times) {
   var cloudX = 100;
   var cloudY = 10;
   var cloudWidth = 420;
@@ -98,12 +99,12 @@ var renderStatistics = function (ctx, names, times) {
   for (var i = 0; i < names.length; i++) {
     // Calculate the histograma bar color.
     var barColor = names[i] === 'Вы' ?
-        'red' : 'rgb(0, 0, ' + Math.floor(Math.random() * 255) + ')';
+      'red' : 'rgb(0, 0, ' + Math.floor(Math.random() * 255) + ')';
 
     // Draw the histogram bar.
     drawHistogramBar(
-      ctx, histogramX, histogramY, maxTime,
-      i, times[i], names[i], barColor,
-      textColor, textFont, lineHeight);
+        ctx, histogramX, histogramY, maxTime,
+        i, times[i], names[i], barColor,
+        textColor, textFont, lineHeight);
   }
 };
