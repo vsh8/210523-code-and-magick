@@ -42,12 +42,12 @@ var WIZARD_EYES_COLORS = [
 
 
 // Generate a random int number.
-var randInt = function(n) {
+var randInt = function (n) {
   return Math.floor(n * Math.random());
 };
 
 // Get random item from the array.
-var randChoice = function(items) {
+var randChoice = function (items) {
   return items[randInt(items.length)];
 };
 
@@ -92,8 +92,9 @@ var renderWizards = function (containerBlock, wizards) {
 // Generate 4 random wizards.
 var WIZARDS_NUMBER = 4;
 var wizards = [];
-for (var i = 0; i < WIZARDS_NUMBER; i++)
+for (var i = 0; i < WIZARDS_NUMBER; i++) {
   wizards.push(generateWizardData());
+}
 
 // Find and show the settings window.
 var userDialog = document.querySelector('.setup');
