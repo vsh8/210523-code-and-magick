@@ -68,8 +68,8 @@ var generateWizardData = function () {
 
 
 // Render the given wizard by his description.
-var renderWizard = function (wizard) {
-  var wizardElement = similarWizardTemplate.cloneNode(true);
+var renderWizard = function (wizard, wizardTemplate) {
+  var wizardElement = wizardTemplate.cloneNode(true);
 
   wizardElement.querySelector('.setup-similar-label').textContent = wizard.name;
   wizardElement.querySelector('.wizard-coat').style.fill = wizard.coatColor;
@@ -79,11 +79,11 @@ var renderWizard = function (wizard) {
 };
 
 
-// Add the given wizards to the specified block.
-var renderWizards = function (containerBlock, wizards) {
+// Render the given wizards to the specified block.
+var renderWizards = function (containerBlock, wizards, wizardTemplate) {
   var fragment = document.createDocumentFragment();
   for (var i = 0; i < wizards.length; i++) {
-    fragment.appendChild(renderWizard(wizards[i]));
+    fragment.appendChild(renderWizard(wizards[i], wizardTemplate));
   }
   containerBlock.appendChild(fragment);
 };
@@ -105,7 +105,7 @@ var similarListElement = document.querySelector('.setup-similar-list');
 var similarWizardTemplate = document.querySelector('#similar-wizard-template').content;
 
 // Draw the wizards.
-renderWizards(similarListElement, wizards);
+renderWizards(similarListElement, wizards, similarWizardTemplate);
 
 // Show the similar characters block.
 document.querySelector('.setup-similar').classList.remove('hidden');
