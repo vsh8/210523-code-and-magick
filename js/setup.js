@@ -70,7 +70,7 @@ var randChoice = function (items) {
 // Get random item not equal to the given one from the array.
 var randChoiceNotEqualTo = function (items, prevValue) {
   var newValue = prevValue;
-  while (newValue == prevValue) {
+  while (newValue === prevValue) {
     newValue = randChoice(items);
   }
   return newValue;
@@ -80,20 +80,16 @@ var randChoiceNotEqualTo = function (items, prevValue) {
 // Perform the RGB to hex color convertion.
 var componentToHex = function (c) {
   var hex = c.toString(16);
-  return hex.length == 1 ? "0" + hex : hex;
+  return hex.length === 1 ? '0' + hex : hex;
 };
 
 var rgbToHex = function (rgbStr) {
-  if (rgbStr == "") {
-    return "#000000";
-  }
-
   var componentsStr = rgbStr.match(/rgb\((.*)\)/)[1];
   var components = componentsStr.split(/, ?/);
   return '#' +
-    componentToHex(parseInt(components[0])) +
-    componentToHex(parseInt(components[1])) +
-    componentToHex(parseInt(components[2]));
+    componentToHex(parseInt(components[0], 10)) +
+    componentToHex(parseInt(components[1], 10)) +
+    componentToHex(parseInt(components[2], 10));
 };
 
 
@@ -223,19 +219,22 @@ var setupWizardElement = document.querySelector('.setup-wizard');
 var wizardCoatElement = setupWizardElement.querySelector('.wizard-coat');
 wizardCoatElement.addEventListener('click', function (evt) {
   evt.target.style.fill = randChoiceNotEqualTo(
-    WIZARD_COAT_COLORS, evt.target.style.fill);
+      WIZARD_COAT_COLORS, evt.target.style.fill);
 });
 
 // Change wizard eyes' color by click.
 var wizardEyesElement = setupWizardElement.querySelector('.wizard-eyes');
 wizardEyesElement.addEventListener('click', function (evt) {
   evt.target.style.fill = randChoiceNotEqualTo(
-    WIZARD_EYES_COLORS, evt.target.style.fill);
+      WIZARD_EYES_COLORS, evt.target.style.fill);
 });
 
 // Change fireboll's color by click.
 var fireballElement = document.querySelector('.setup-fireball-wrap');
 fireballElement.addEventListener('click', function (evt) {
+  var currentColor = evt.target.style.backgroundColor ||
+      window.getComputedStyle(fireballElement, null).getPropertyValue('background-color');
+
   evt.target.style.backgroundColor = randChoiceNotEqualTo(
-    FIREBALL_COLORS, rgbToHex(evt.target.style.backgroundColor));
+      FIREBALL_COLORS, rgbToHex(currentColor));
 });
