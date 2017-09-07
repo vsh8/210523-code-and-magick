@@ -146,10 +146,11 @@ renderWizards(similarListElement, wizards, similarWizardTemplate);
 
 
 // Implement setup popup window opening and closing.
-var setup = document.querySelector('.setup');
-var setupOpen = document.querySelector('.setup-open');
-var setupClose = setup.querySelector('.setup-close');
-var userNameInput = setup.querySelector('.setup-user-name');
+var setupElement = document.querySelector('.setup');
+var setupOpenElement = document.querySelector('.setup-open');
+var setupCloseElement = setupElement.querySelector('.setup-close');
+var setupSubmitElement = setupElement.querySelector('.setup-submit');
+var userNameInput = setupElement.querySelector('.setup-user-name');
 
 var onPopupEscPress = function (evt) {
   if (evt.target !== userNameInput && evt.keyCode === ESC_KEYCODE) {
@@ -157,39 +158,13 @@ var onPopupEscPress = function (evt) {
   }
 };
 
-var openPopup = function () {
-  setup.classList.remove('hidden');
-  document.addEventListener('keydown', onPopupEscPress);
-};
-
-var closePopup = function () {
-  setup.classList.add('hidden');
-  document.removeEventListener('keydown', onPopupEscPress);
-};
-
-setupOpen.addEventListener('click', function () {
-  openPopup();
-});
-
-setupOpen.addEventListener('keydown', function (evt) {
-  if (evt.keyCode === ENTER_KEYCODE) {
-    openPopup();
-  }
-});
-
-setupClose.addEventListener('click', function () {
-  closePopup();
-});
-
-setupClose.addEventListener('keydown', function (evt) {
+var onPopupCloseKeyPress = function (evt) {
   if (evt.keyCode === ENTER_KEYCODE) {
     closePopup();
   }
-});
+};
 
-
-// Customize name input validation.
-userNameInput.addEventListener('invalid', function (evt) {
+var onUserNameInvalidData = function (evt) {
   var target = evt.target;
   if (target.validity.tooShort) {
     target.setCustomValidity('Имя должно состоять минимум из 2-х символов');
@@ -200,41 +175,86 @@ userNameInput.addEventListener('invalid', function (evt) {
   } else {
     target.setCustomValidity('');
   }
-});
+};
 
-// Implement minlength behavior for the Edge browser.
-userNameInput.addEventListener('input', function (evt) {
+var onUserNameInputData = function (evt) {
   var target = evt.target;
   if (target.value.length < 2) {
     target.setCustomValidity('Имя должно состоять минимум из 2-х символов');
   } else {
     target.setCustomValidity('');
   }
-});
-
+};
 
 var setupWizardElement = document.querySelector('.setup-wizard');
-
-// Change wizard coat's color by click.
 var wizardCoatElement = setupWizardElement.querySelector('.wizard-coat');
-wizardCoatElement.addEventListener('click', function (evt) {
+var wizardEyesElement = setupWizardElement.querySelector('.wizard-eyes');
+var fireballElement = document.querySelector('.setup-fireball-wrap');
+
+var onWizardCoatClick = function (evt) {
   evt.target.style.fill = randChoiceNotEqualTo(
       WIZARD_COAT_COLORS, evt.target.style.fill);
-});
+};
 
-// Change wizard eyes' color by click.
-var wizardEyesElement = setupWizardElement.querySelector('.wizard-eyes');
-wizardEyesElement.addEventListener('click', function (evt) {
+var onWizardEyesClick = function (evt) {
   evt.target.style.fill = randChoiceNotEqualTo(
       WIZARD_EYES_COLORS, evt.target.style.fill);
-});
+};
 
-// Change fireboll's color by click.
-var fireballElement = document.querySelector('.setup-fireball-wrap');
-fireballElement.addEventListener('click', function (evt) {
+var onFireballClick = function (evt) {
   var currentColor = evt.target.style.backgroundColor ||
       window.getComputedStyle(fireballElement, null).getPropertyValue('background-color');
 
   evt.target.style.backgroundColor = randChoiceNotEqualTo(
       FIREBALL_COLORS, rgbToHex(currentColor));
+};
+
+var openPopup = function () {
+  setupElement.classList.remove('hidden');
+
+  document.addEventListener('keydown', onPopupEscPress);
+
+  // Setup popup closing.
+  setupCloseElement.addEventListener('click', closePopup);
+  setupCloseElement.addEventListener('keydown', onPopupCloseKeyPress);
+  setupSubmitElement.addEventListener('click', closePopup);
+  setupSubmitElement.addEventListener('keydown', onPopupCloseKeyPress);
+
+  // Customize name input validation.
+  userNameInput.addEventListener('invalid', onUserNameInvalidData);
+  // Implement minlength behavior for the Edge browser.
+  userNameInput.addEventListener('input', onUserNameInputData);
+
+  // Change wizard coat's color by click.
+  wizardCoatElement.addEventListener('click', onWizardCoatClick);
+  // Change wizard eyes' color by click.
+  wizardEyesElement.addEventListener('click', onWizardEyesClick);
+  // Change fireball's color by click.
+  fireballElement.addEventListener('click', onFireballClick);
+};
+
+var closePopup = function () {
+  setupElement.classList.add('hidden');
+
+  document.removeEventListener('keydown', onPopupEscPress);
+
+  setupCloseElement.removeEventListener('click', closePopup);
+  setupCloseElement.removeEventListener('keydown', onPopupCloseKeyPress);
+  setupSubmitElement.removeEventListener('click', closePopup);
+  setupSubmitElement.removeEventListener('keydown', onPopupCloseKeyPress);
+
+  userNameInput.removeEventListener('invalid', onUserNameInvalidData);
+  userNameInput.removeEventListener('input', onUserNameInputData);
+
+  wizardCoatElement.removeEventListener('click', onWizardCoatClick);
+  wizardEyesElement.removeEventListener('click', onWizardEyesClick);
+  fireballElement.removeEventListener('click', onFireballClick);
+};
+
+setupOpenElement.addEventListener('click', openPopup);
+
+setupOpenElement.addEventListener('keydown', function (evt) {
+  if (evt.keyCode === ENTER_KEYCODE) {
+    openPopup();
+  }
 });
