@@ -209,6 +209,49 @@ var onFireballClick = function (evt) {
       FIREBALL_COLORS, rgbToHex(currentColor));
 };
 
+
+var dialogHandleElement = setupElement.querySelector('.setup-title');
+
+var onDialogHandleMouseDown = function (evt) {
+  if (evt.target !== userNameInput) {
+    evt.preventDefault();
+  }
+
+  var startCoords = {
+    x: evt.clientX,
+    y: evt.clientY
+  };
+
+  // Move dialog on mouse move.
+  var onMouseMove = function (moveEvt) {
+    moveEvt.preventDefault();
+
+    var shift = {
+      x: startCoords.x - moveEvt.clientX,
+      y: startCoords.y - moveEvt.clientY
+    };
+
+    startCoords = {
+      x: moveEvt.clientX,
+      y: moveEvt.clientY
+    };
+
+    setupElement.style.left = (setupElement.offsetLeft - shift.x) + 'px';
+    setupElement.style.top = (setupElement.offsetTop - shift.y) + 'px';
+  };
+
+  // Remove mouse event listeners on mouse up.
+  var onMouseUp = function (upEvt) {
+    upEvt.preventDefault();
+
+    document.removeEventListener('mousemove', onMouseMove);
+    document.removeEventListener('mouseup', onMouseUp);
+  };
+
+  document.addEventListener('mousemove', onMouseMove);
+  document.addEventListener('mouseup', onMouseUp);
+};
+
 var openPopup = function () {
   setupElement.classList.remove('hidden');
 
@@ -231,6 +274,8 @@ var openPopup = function () {
   wizardEyesElement.addEventListener('click', onWizardEyesClick);
   // Change fireball's color by click.
   fireballElement.addEventListener('click', onFireballClick);
+
+  dialogHandleElement.addEventListener('mousedown', onDialogHandleMouseDown);
 };
 
 var closePopup = function () {
@@ -249,6 +294,8 @@ var closePopup = function () {
   wizardCoatElement.removeEventListener('click', onWizardCoatClick);
   wizardEyesElement.removeEventListener('click', onWizardEyesClick);
   fireballElement.removeEventListener('click', onFireballClick);
+
+  dialogHandleElement.removeEventListener('mousedown', onDialogHandleMouseDown);
 };
 
 setupOpenElement.addEventListener('click', openPopup);
