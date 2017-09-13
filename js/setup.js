@@ -252,6 +252,41 @@ var onDialogHandleMouseDown = function (evt) {
   document.addEventListener('mouseup', onMouseUp);
 };
 
+
+var shopElement = document.querySelector('.setup-artifacts-shop');
+var draggedItem = null;
+
+var artifactsElement = document.querySelector('.setup-artifacts');
+
+var onShopElementDragStart = function (evt) {
+  if (evt.target.tagName.toLowerCase() === 'img') {
+    draggedItem = evt.target;
+    evt.dataTransfer.setData('text/plain', evt.target.alt);
+  }
+};
+
+var onArtifactsElementDragOver = function (evt) {
+  evt.preventDefault();
+  return false;
+};
+
+var onArtifactsElementDrop = function (evt) {
+  evt.target.style.backgroundColor = '';
+  evt.target.appendChild(draggedItem);
+  evt.preventDefault();
+};
+
+var onArtifactsElementDragEnter = function (evt) {
+  evt.target.style.backgroundColor = 'yellow';
+  evt.preventDefault();
+};
+
+var onArtifactsElementDragLeave = function (evt) {
+  evt.target.style.backgroundColor = '';
+  evt.preventDefault();
+};
+
+
 var openPopup = function () {
   setupElement.classList.remove('hidden');
 
@@ -276,6 +311,13 @@ var openPopup = function () {
   fireballElement.addEventListener('click', onFireballClick);
 
   dialogHandleElement.addEventListener('mousedown', onDialogHandleMouseDown);
+
+  shopElement.addEventListener('dragstart', onShopElementDragStart);
+
+  artifactsElement.addEventListener('dragover', onArtifactsElementDragOver);
+  artifactsElement.addEventListener('drop', onArtifactsElementDrop);
+  artifactsElement.addEventListener('dragenter', onArtifactsElementDragEnter);
+  artifactsElement.addEventListener('dragleave', onArtifactsElementDragLeave);
 };
 
 var closePopup = function () {
@@ -296,6 +338,13 @@ var closePopup = function () {
   fireballElement.removeEventListener('click', onFireballClick);
 
   dialogHandleElement.removeEventListener('mousedown', onDialogHandleMouseDown);
+
+  shopElement.removeEventListener('dragstart', onShopElementDragStart);
+
+  artifactsElement.removeEventListener('dragover', onArtifactsElementDragOver);
+  artifactsElement.removeEventListener('drop', onArtifactsElementDrop);
+  artifactsElement.removeEventListener('dragenter', onArtifactsElementDragEnter);
+  artifactsElement.removeEventListener('dragleave', onArtifactsElementDragLeave);
 };
 
 setupOpenElement.addEventListener('click', openPopup);
