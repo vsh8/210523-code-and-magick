@@ -47,23 +47,30 @@
   var wizardEyesElement = setupWizardElement.querySelector('.wizard-eyes');
   var fireballElement = document.querySelector('.setup-fireball-wrap');
 
-  var onWizardCoatClick = function (evt) {
-    evt.target.style.fill = window.rand.randChoiceNotEqualTo(
-        window.colors.WIZARD_COAT_COLORS, evt.target.style.fill);
+  var getElementColor = function (element) {
+    return element.style.fill;
   };
 
-  var onWizardEyesClick = function (evt) {
-    evt.target.style.fill = window.rand.randChoiceNotEqualTo(
-        window.colors.WIZARD_EYES_COLORS, evt.target.style.fill);
+  var fillElement = function (element, color) {
+    element.style.fill = color;
   };
 
-  var onFireballClick = function (evt) {
-    var currentColor = evt.target.style.backgroundColor ||
+  var getElementBackgroundColor = function (element) {
+    var backgroundColor = element.style.backgroundColor ||
         window.getComputedStyle(fireballElement, null).getPropertyValue('background-color');
-
-    evt.target.style.backgroundColor = window.rand.randChoiceNotEqualTo(
-        window.colors.FIREBALL_COLORS, window.colors.rgbToHex(currentColor));
+    return window.colors.rgbToHex(backgroundColor);
   };
+
+  var changeElementBackgroundColor = function (element, color) {
+    element.style.backgroundColor = color;
+  };
+
+  window.colorizeElement(
+      wizardCoatElement, window.colors.WIZARD_COAT_COLORS, getElementColor, fillElement);
+  window.colorizeElement(
+      wizardEyesElement, window.colors.WIZARD_EYES_COLORS, getElementColor, fillElement);
+  window.colorizeElement(
+      fireballElement, window.colors.FIREBALL_COLORS, getElementBackgroundColor, changeElementBackgroundColor);
 
 
   var dialogHandleElement = setupElement.querySelector('.setup-title');
@@ -178,13 +185,6 @@
     // Implement minlength behavior for the Edge browser.
     userNameInput.addEventListener('input', onUserNameInputData);
 
-    // Change wizard coat's color by click.
-    wizardCoatElement.addEventListener('click', onWizardCoatClick);
-    // Change wizard eyes' color by click.
-    wizardEyesElement.addEventListener('click', onWizardEyesClick);
-    // Change fireball's color by click.
-    fireballElement.addEventListener('click', onFireballClick);
-
     dialogHandleElement.addEventListener('mousedown', onDialogHandleMouseDown);
 
     shopElement.addEventListener('dragstart', onShopElementDragStart);
@@ -208,10 +208,6 @@
 
     userNameInput.removeEventListener('invalid', onUserNameInvalidData);
     userNameInput.removeEventListener('input', onUserNameInputData);
-
-    wizardCoatElement.removeEventListener('click', onWizardCoatClick);
-    wizardEyesElement.removeEventListener('click', onWizardEyesClick);
-    fireballElement.removeEventListener('click', onFireballClick);
 
     dialogHandleElement.removeEventListener('mousedown', onDialogHandleMouseDown);
 
