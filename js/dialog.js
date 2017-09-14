@@ -7,6 +7,9 @@
   var setupSubmitElement = setupElement.querySelector('.setup-submit');
   var userNameInput = setupElement.querySelector('.setup-user-name');
 
+  var setupElementOrigX;
+  var setupElementOrigY;
+
   var onPopupEscPress = function (evt) {
     if (evt.target !== userNameInput) {
       window.util.isEscEvent(evt, closePopup);
@@ -115,11 +118,18 @@
     if (evt.target.tagName.toLowerCase() === 'img') {
       draggedItem = evt.target;
       evt.dataTransfer.setData('text/plain', evt.target.alt);
+
+      artifactsElement.style.outline = '2px dashed red';
     }
+  };
+
+  var onShopElementDragEnd = function () {
+    artifactsElement.style.outline = '';
   };
 
   var onArtifactsElementDragOver = function (evt) {
     evt.preventDefault();
+
     return false;
   };
 
@@ -127,6 +137,8 @@
     evt.target.style.backgroundColor = '';
     evt.target.appendChild(draggedItem);
     evt.preventDefault();
+
+    artifactsElement.style.outline = '';
   };
 
   var onArtifactsElementDragEnter = function (evt) {
@@ -141,7 +153,17 @@
 
 
   var openPopup = function () {
-    setupElement.classList.remove('hidden');
+    if (typeof setupElementOrigX === 'undefined') {
+      setupElement.classList.remove('hidden');
+
+      setupElementOrigX = setupElement.offsetLeft;
+      setupElementOrigY = setupElement.offsetTop;
+    } else {
+      setupElement.style.left = setupElementOrigX + 'px';
+      setupElement.style.top = setupElementOrigY + 'px';
+
+      setupElement.classList.remove('hidden');
+    }
 
     document.addEventListener('keydown', onPopupEscPress);
 
@@ -166,6 +188,7 @@
     dialogHandleElement.addEventListener('mousedown', onDialogHandleMouseDown);
 
     shopElement.addEventListener('dragstart', onShopElementDragStart);
+    shopElement.addEventListener('dragend', onShopElementDragEnd);
 
     artifactsElement.addEventListener('dragover', onArtifactsElementDragOver);
     artifactsElement.addEventListener('drop', onArtifactsElementDrop);
@@ -193,6 +216,7 @@
     dialogHandleElement.removeEventListener('mousedown', onDialogHandleMouseDown);
 
     shopElement.removeEventListener('dragstart', onShopElementDragStart);
+    shopElement.removeventListener('dragend', onShopElementDragEnd);
 
     artifactsElement.removeEventListener('dragover', onArtifactsElementDragOver);
     artifactsElement.removeEventListener('drop', onArtifactsElementDrop);
